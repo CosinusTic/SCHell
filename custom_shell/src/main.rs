@@ -1,8 +1,9 @@
 use std::io::{self, Write};
 
-mod shell;
+use custom_shell::shell::shell::*;
 
 fn main() {
+    let commands = register_commands();
     loop {
         print!("> ");
 
@@ -15,8 +16,8 @@ fn main() {
         if input == "exit" {
             break;
         }
-
-        let command = shell::shell::parse_command(input);
-        shell::shell::execute_command(command);
+        
+        let command = parse_command(input);
+        execute_command(command, &commands);
     }
 }   
