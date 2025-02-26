@@ -1,5 +1,5 @@
 [package]
-name = "custom_shell"
+name = "myshell"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,3 +7,5 @@ edition = "2021"
 
 [dependencies]
 sysinfo = "0.31.4"
+os_pipe = "1.0"
+libc = "0.2.170"
