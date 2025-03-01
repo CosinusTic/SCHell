@@ -45,4 +45,5 @@ fn main() {
     });
 
     println!("Captured {}", out);
+    foo();
 }
