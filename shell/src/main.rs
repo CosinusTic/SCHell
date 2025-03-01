@@ -5,14 +5,6 @@ use myshell::shell::shell::*;
 use myshell::utils::str_to_vec;
 use std::io::{stdin, stdout, Write};
 
-fn foo() {
-    println!("This is some nice output");
-}
-
-fn bar() {
-    println!("This is also some nice output");
-}
-
 fn main() {
     /* ---------------- Basic shell ----------------- */
     /*
@@ -58,20 +50,40 @@ fn main() {
             .read_line(&mut input)
             .expect("Failed to read command.");
         println!("Trimmed input: {:?}", str_to_vec(input.as_str()));
-        let mut cmd: Vec<&str> = Vec::new();
-        let _ = input.split(" ").map(|x| {
-            cmd.push(x);
-            println!("x: {}", x);
-            x
-        });
-        println!("cmd: {:?}", cmd);
-        let node_test: AstNode = parse_cmd(&[
+        // -------------- Commands --------------
+        let cmd1 = &[
             "ls".to_string(),
             ".".to_string(),
             "|".to_string(),
             "hello".to_string(),
-        ]);
-        node_test.debug();
-        // let node: AstNode = parse_cmd(input.split("").collect());
+        ];
+
+        let cmd2 = &[
+            "ls".to_string(),
+            "-la".to_string(),
+            ".".to_string(),
+            "|".to_string(),
+            "grep".to_string(),
+            "zizi".to_string(),
+        ];
+
+        let cmd3 = &[
+            "ls".to_string(),
+            ".".to_string(),
+            "|".to_string(),
+            "hello".to_string(),
+        ];
+
+        let cmd4 = &["ls".to_string(), ".".to_string()];
+        let cmd5 = &[
+            "ls".to_string(),
+            ".".to_string(),
+            "|".to_string(),
+            "grep".to_string(),
+            "zizi".to_string(),
+        ];
+        let node = parse_cmd(cmd5);
+        // node.debug();
+        exec(node, &commands, &commands_str);
     }
 }

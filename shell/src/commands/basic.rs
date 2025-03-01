@@ -1,7 +1,11 @@
 use std::fs;
 
-pub fn hello_command() {
+pub fn greet() {
     println!("Hello World");
+}
+
+pub fn echo(out: &str) {
+    println!("{}", out);
 }
 
 pub fn ls(path: &str) {

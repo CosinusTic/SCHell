@@ -1,5 +1,8 @@
 use crate::{ast::AstNode, commands::*};
-use std::collections::HashMap;
+use std::{
+    collections::HashMap,
+    ops::{Deref, DerefMut},
+};
 
 type Command = fn();
 type CommandStr = fn(&str);
@@ -10,7 +13,7 @@ pub fn parse_command(input: &str) -> Vec<String> {
 
 pub fn register_commands() -> HashMap<String, Command> {
     let mut commands = HashMap::new();
-    commands.insert("hello".to_string(), hello_command as Command);
+    commands.insert("hello".to_string(), greet as Command);
     commands.insert("mypid".to_string(), my_pid as Command);
     commands.insert("lprocf".to_string(), l_procfiles as Command);
     commands
@@ -19,7 +22,7 @@ pub fn register_commands() -> HashMap<String, Command> {
 pub fn register_commands_str() -> HashMap<String, CommandStr> {
     let mut commands = HashMap::new();
     commands.insert("ls".to_string(), ls as CommandStr);
-
+    commands.insert("echo".to_string(), echo as CommandStr);
     commands
 }
 
@@ -48,6 +51,42 @@ pub fn exec(
     registered_commands: &HashMap<String, Command>,
     registered_commands_str: &HashMap<String, CommandStr>,
 ) {
+    println!("Node at execution stage: {:?}", node);
+    match node {
+        AstNode::Command { name, args } => {
+            if let Some(cmd) = registered_commands.get(&name) {
+                // cmd();
+                println!("Executing command: \"{}\"", name);
+            } else if let Some(cmd) = registered_commands_str.get(&name) {
+                // cmd(&args[0]);
+                println!("Executing command: \"{}\" (with args \"{:?}\")", name, args)
+            } else {
+                println!("Cannot find command: \"{}\"", &name);
+                return;
+            }
+        }
+        AstNode::Pipe { left, right } => {
+            /*exec(
+                AstNode::Command {
+                    name: left.into(),
+                    args: &[],
+                },
+                registered_commands,
+                registered_commands_str,
+            );*/
+            println!("Encountered pipe (Left: {:?}, right: {:?})", left, right);
+        }
+        AstNode::Redirect {
+            command,
+            file,
+            append,
+        } => {
+            println!("Handling redirect");
+        }
+        AstNode::Sequence { left, right } => {
+            println!("Handling seq");
+        }
+    }
     /* Outer if: big match on node
     * ex match node {
     * AstNode::Command {name, args} => {

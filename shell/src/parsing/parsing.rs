@@ -33,6 +33,8 @@ pub fn parse_cmd(tokens: &[String]) -> AstNode {
         };
     }
 
+    println!("Tokens: {:?}", tokens);
+
     AstNode::Command {
         name: tokens[0].clone(),
         args: tokens[1..].to_vec(),
