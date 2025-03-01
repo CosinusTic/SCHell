@@ -24,7 +24,7 @@ pub enum AstNode {
 }
 
 impl AstNode {
-    pub fn debug(&self, level: usize) {
+    fn _debug(&self, level: usize) {
         let indent = "  ".repeat(level);
 
         match self {
@@ -38,9 +38,9 @@ impl AstNode {
             AstNode::Pipe { left, right } => {
                 println!("{}Pipe:", indent);
                 println!("{}  Left:", indent);
-                left.debug(level + 2);
+                left._debug(level + 2);
                 println!("{}  Right:", indent);
-                right.debug(level + 2);
+                right._debug(level + 2);
             }
             AstNode::Redirect {
                 command,
@@ -51,15 +51,19 @@ impl AstNode {
                 println!("{}  File: {}", indent, file);
                 println!("{}  Append: {}", indent, append);
                 println!("{}  Command:", indent);
-                command.debug(level + 2);
+                command._debug(level + 2);
             }
             AstNode::Sequence { left, right } => {
                 println!("{}Sequence:", indent);
                 println!("{}  Left:", indent);
-                left.debug(level + 2);
+                left._debug(level + 2);
                 println!("{}  Right:", indent);
-                right.debug(level + 2);
+                right._debug(level + 2);
             }
         }
+    }
+
+    pub fn debug(&self) {
+        self._debug(0);
     }
 }

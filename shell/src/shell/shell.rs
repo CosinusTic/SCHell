@@ -43,7 +43,7 @@ pub fn execute_command(
     }
 }
 
-pub fn execute(
+pub fn exec(
     node: AstNode,
     registered_commands: &HashMap<String, Command>,
     registered_commands_str: &HashMap<String, CommandStr>,
