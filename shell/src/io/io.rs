@@ -1,6 +1,6 @@
 use libc::{dup, dup2};
 use std::fs::File;
-use std::io::{self, Read, Write};
+use std::io::{self, BufRead, BufReader, Read, Write};
 use std::os::unix::io::{AsRawFd, FromRawFd};
 
 // Capture stdout of the current process
@@ -36,3 +36,20 @@ where
 
     output
 }
+
+pub fn load_f_lines(path: &str) -> Vec<String> {
+    let f: File = File::open(path).expect("Failed to open file");
+    let br = BufReader::new(f);
+    let r = br.lines().map(|l| l.unwrap());
+    r.collect()
+}
+
+/*
+pub fn load_f_first_line(path: &str) -> &String {
+    let f: File = File::open(path).expect("Failed to open file");
+    let br = BufReader::new(f);
+    let r = br.lines().map(|l| l.unwrap());
+    let l: Vec<String> = r.collect();
+    l.first().unwrap()
+}
+*/

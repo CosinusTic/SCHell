@@ -1,8 +1,9 @@
-use myshell::ast::AstNode;
+use myshell::commands::get_RAM_size;
 use myshell::io::*;
 use myshell::parsing::parse_cmd;
 use myshell::shell::shell::*;
 use myshell::utils::str_to_vec;
+use myshell::{ast::AstNode, commands::grep};
 use std::io::{stdin, stdout, Write};
 
 fn main() {
@@ -29,14 +30,11 @@ fn main() {
 
     */
     /* -------------------------- Stdout tests ------------------- */
-    /*
-    let out = capture_fun_stdout(|| {
-        foo();
-        bar();
-    });
 
-    println!("Captured {}", out);
-    foo();
+    /*
+    let out = capt_stdout(|| {
+        myshell::commands::greet();
+    });
     */
 
     /* --------------- AST shell test ---------------------- */
@@ -50,7 +48,6 @@ fn main() {
             .read_line(&mut input)
             .expect("Failed to read command.");
         println!("Trimmed input: {:?}", str_to_vec(input.as_str()));
-        // -------------- Commands --------------
         let cmd1 = &[
             "ls".to_string(),
             ".".to_string(),
@@ -85,5 +82,7 @@ fn main() {
         let node = parse_cmd(cmd5);
         // node.debug();
         exec(node, &commands, &commands_str);
+
+        get_RAM_size();
     }
 }

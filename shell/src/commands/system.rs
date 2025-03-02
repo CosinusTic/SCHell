@@ -1,5 +1,7 @@
+use crate::io::load_f_lines;
 use std::fs::{read_dir, File};
-use std::io::{stderr, stdin, stdout};
+use std::io::{stderr, stdin, stdout, BufRead, BufReader};
+use std::ops::Add;
 
 fn curr_pid() -> u32 {
     match sysinfo::get_current_pid() {
@@ -31,4 +33,20 @@ pub fn l_procfiles() {
             }
         }
     }
+}
+
+pub fn get_RAM_size() {
+    let start_path: &str = &"/sys/firmware/memmap/0/start";
+    let end_path: &str = &"/sys/firmware/memmap/0/end";
+    let type_path: &str = &"/sys/firmware/memmap/0/type";
+
+    let start_lines = load_f_lines(start_path);
+    let end_lines = load_f_lines(end_path);
+    let type_lines = load_f_lines(type_path);
+    let t = type_lines.first().unwrap();
+    let e = end_lines.first().unwrap();
+    let s = start_lines.first().unwrap();
+    println!("Type: {}", t);
+    println!("Start: {}", s);
+    println!("End: {}", e);
 }
