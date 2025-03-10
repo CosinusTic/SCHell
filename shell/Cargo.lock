@@ -3,6 +3,12 @@
 version = 4
 
 [[package]]
+name = "ascii-to-hex"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dcc3b1e1b5748d07f6f45cfa7567a3cd3b0fb85374711f31a4f599947c78b5fb"
+
+[[package]]
 name = "core-foundation-sys"
 version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -55,6 +61,7 @@ checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 name = "myshell"
 version = "0.1.0"
 dependencies = [
+ "ascii-to-hex",
  "libc",
  "os_pipe",
  "sysinfo",

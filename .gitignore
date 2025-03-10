@@ -1,3 +1,3 @@
-shell/target
-window/target
 .idea
+**/Cargo.lock
+**/target

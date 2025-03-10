@@ -1,23 +1,19 @@
 #[derive(Debug)]
 pub enum AstNode {
     Command {
-        // A simple command
         name: String,
         args: Vec<String>,
     },
     Pipe {
-        // A pipeline command: output of left is passed as input for right
         left: Box<AstNode>,
         right: Box<AstNode>,
     },
     Redirect {
-        // ">" the output of the command is written (or appended) into the file
         command: Box<AstNode>,
         file: String,
         append: bool,
     },
     Sequence {
-        // Just two commands executed (left then right)
         left: Box<AstNode>,
         right: Box<AstNode>,
     },

@@ -1,9 +1,9 @@
-use myshell::commands::get_RAM_size;
-use myshell::io::*;
-use myshell::parsing::parse_cmd;
-use myshell::shell::shell::*;
-use myshell::utils::str_to_vec;
-use myshell::{ast::AstNode, commands::grep};
+use shell::commands::get_RAM_size;
+use shell::io::*;
+use shell::parsing::parse;
+use shell::shell::shell::*;
+use shell::utils::str_to_vec;
+use shell::{ast::AstNode, commands::grep};
 use std::io::{stdin, stdout, Write};
 
 fn main() {
@@ -79,10 +79,10 @@ fn main() {
             "grep".to_string(),
             "zizi".to_string(),
         ];
-        let node = parse_cmd(cmd5);
+        let node = parse(cmd5);
         // node.debug();
         exec(node, &commands, &commands_str);
 
-        get_RAM_size();
+        // get_RAM_size();
     }
 }

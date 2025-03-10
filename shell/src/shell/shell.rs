@@ -56,25 +56,22 @@ pub fn exec(
         AstNode::Command { name, args } => {
             if let Some(cmd) = registered_commands.get(&name) {
                 // cmd();
-                println!("Executing command: \"{}\"", name);
+                println!("[FINAL] Executing command: \"{}\"", name);
             } else if let Some(cmd) = registered_commands_str.get(&name) {
                 // cmd(&args[0]);
-                println!("Executing command: \"{}\" (with args \"{:?}\")", name, args)
+                println!(
+                    "[FINAL] Executing command: \"{}\" (with args \"{:?}\")",
+                    name, args
+                )
             } else {
-                println!("Cannot find command: \"{}\"", &name);
+                println!("[FINAL] Cannot find command: \"{}\"", &name);
                 return;
             }
         }
         AstNode::Pipe { left, right } => {
-            /*exec(
-                AstNode::Command {
-                    name: left.into(),
-                    args: &[],
-                },
-                registered_commands,
-                registered_commands_str,
-            );*/
             println!("Encountered pipe (Left: {:?}, right: {:?})", left, right);
+            exec(*left, registered_commands, registered_commands_str);
+            exec(*right, registered_commands, registered_commands_str);
         }
         AstNode::Redirect {
             command,

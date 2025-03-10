@@ -1,0 +1,9 @@
+[workspace]
+resolver="2"
+members=["shell", "window"]
+
+[workspace.dependencies]
+sysinfo = "0.31.4"
+os_pipe = "1.0"
+libc = "0.2.170"
+ascii-to-hex = "0.1.1"
