@@ -4,9 +4,9 @@ use shell::parsing::parse;
 use shell::shell::shell::*;
 use shell::utils::str_to_vec;
 use shell::{ast::AstNode, commands::grep};
-use std::io::{stdin, stdout, Write};
+use std::io::{stdin, stdout, BufRead, Result, Write};
 
-fn main() {
+fn main() -> Result<()> {
     /* ---------------- Basic shell ----------------- */
     /*
 
@@ -39,15 +39,21 @@ fn main() {
 
     /* --------------- AST shell test ---------------------- */
     let commands = register_commands();
-    let commands_str = register_commands_str();
     loop {
         print!("> ");
         stdout().flush().unwrap();
-        let mut input = String::new();
+        /*let mut input = String::new();
         stdin()
             .read_line(&mut input)
             .expect("Failed to read command.");
         println!("Trimmed input: {:?}", str_to_vec(input.as_str()));
+        let v = str_to_vec(input.as_str());*/
+        let mut input = String::new();
+        std::io::stdin().read_line(&mut input)?;
+        let mut lines: Vec<String> = input.trim().split_whitespace().map(String::from).collect();
+        let slice: &[String] = &lines;
+
+        let cmd_slice: &[String] = &lines;
         let cmd1 = &[
             "ls".to_string(),
             ".".to_string(),
@@ -79,9 +85,9 @@ fn main() {
             "grep".to_string(),
             "zizi".to_string(),
         ];
-        let node = parse(cmd5);
+        let node = parse(cmd_slice);
         // node.debug();
-        exec(node, &commands, &commands_str);
+        exec(node, &commands);
 
         // get_RAM_size();
     }

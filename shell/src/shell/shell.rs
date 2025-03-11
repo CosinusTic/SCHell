@@ -1,11 +1,12 @@
+use crate::io::capt_stdout;
+use crate::utils::trim_eol;
 use crate::{ast::AstNode, commands::*};
 use std::{
     collections::HashMap,
     ops::{Deref, DerefMut},
 };
 
-type Command = fn();
-type CommandStr = fn(&str);
+type Command = fn(Vec<String>);
 
 pub fn parse_command(input: &str) -> Vec<String> {
     input.split_whitespace().map(String::from).collect()
@@ -13,52 +14,37 @@ pub fn parse_command(input: &str) -> Vec<String> {
 
 pub fn register_commands() -> HashMap<String, Command> {
     let mut commands = HashMap::new();
-    commands.insert("hello".to_string(), greet as Command);
-    commands.insert("mypid".to_string(), my_pid as Command);
-    commands.insert("lprocf".to_string(), l_procfiles as Command);
-    commands
-}
-
-pub fn register_commands_str() -> HashMap<String, CommandStr> {
-    let mut commands = HashMap::new();
-    commands.insert("ls".to_string(), ls as CommandStr);
-    commands.insert("echo".to_string(), echo as CommandStr);
+    commands.insert(String::from("hello"), greet as Command);
+    commands.insert(String::from("mypid"), my_pid as Command);
+    commands.insert(String::from("lprocf"), l_procfiles as Command);
+    commands.insert(String::from("ls"), ls as Command);
+    commands.insert(String::from("echo"), echo as Command);
+    commands.insert(String::from("grep"), grep as Command);
     commands
 }
 
 pub fn execute_command(
     command: Vec<String>,
     registered_commands: &HashMap<String, Command>,
-    registered_commands_str: &HashMap<String, CommandStr>,
 ) -> bool {
     if command.is_empty() {
         return false;
     }
 
     if let Some(cmd) = registered_commands.get(&command[0]) {
-        cmd();
-        true
-    } else if let Some(cmd) = registered_commands_str.get(&command[0]) {
-        cmd(&command[1]);
+        cmd(command[1..].to_vec());
         true
     } else {
         false
     }
 }
 
-pub fn exec(
-    node: AstNode,
-    registered_commands: &HashMap<String, Command>,
-    registered_commands_str: &HashMap<String, CommandStr>,
-) {
-    println!("Node at execution stage: {:?}", node);
+pub fn exec(node: AstNode, registered_commands: &HashMap<String, Command>) {
+    // println!("Node at execution stage: {:?}", node);
     match node {
         AstNode::Command { name, args } => {
             if let Some(cmd) = registered_commands.get(&name) {
-                // cmd();
-                println!("[FINAL] Executing command: \"{}\"", name);
-            } else if let Some(cmd) = registered_commands_str.get(&name) {
-                // cmd(&args[0]);
+                cmd(args.clone());
                 println!(
                     "[FINAL] Executing command: \"{}\" (with args \"{:?}\")",
                     name, args
@@ -69,9 +55,20 @@ pub fn exec(
             }
         }
         AstNode::Pipe { left, right } => {
-            println!("Encountered pipe (Left: {:?}, right: {:?})", left, right);
-            exec(*left, registered_commands, registered_commands_str);
-            exec(*right, registered_commands, registered_commands_str);
+            // println!("Encountered pipe (Left: {:?}, right: {:?})", left, right);
+            let out = capt_stdout(|| {
+                exec(*left, registered_commands);
+            });
+            if let AstNode::Command { name, args } = *right {
+                let mut v: Vec<String> = vec![out];
+                v.extend(args.iter().map(|s| s.trim_end().to_string()));
+                if let Some(cmd) = registered_commands.get(&name) {
+                    cmd(v);
+                    return;
+                }
+            } else {
+                exec(*right, registered_commands);
+            }
         }
         AstNode::Redirect {
             command,
@@ -84,7 +81,7 @@ pub fn exec(
             println!("Handling seq");
         }
     }
-    /* Outer if: big match on node
+    /* Outer if: big match on node;
     * ex match node {
     * AstNode::Command {name, args} => {
     *  inner ifs go here

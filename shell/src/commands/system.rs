@@ -16,14 +16,14 @@ fn pid_fpath(pid: &u32) -> String {
     String::from("/proc/") + pid.to_string().as_str()
 }
 
-pub fn my_pid() {
+pub fn my_pid(_args: Vec<String>) {
     match curr_pid() {
         0 => println!("Failed to get current PID"),
         _ => println!("Current PID is {}", curr_pid()),
     }
 }
 
-pub fn l_procfiles() {
+pub fn l_procfiles(_args: Vec<String>) {
     let pid = curr_pid();
     match pid {
         0 => println!("Failed to retrieve current PID"),
@@ -37,7 +37,7 @@ pub fn l_procfiles() {
     }
 }
 
-pub fn get_RAM_size() {
+pub fn get_RAM_size(_args: Vec<String>) {
     let start_path: &str = &"/sys/firmware/memmap/0/start";
     let end_path: &str = &"/sys/firmware/memmap/0/end";
     let type_path: &str = &"/sys/firmware/memmap/0/type";
