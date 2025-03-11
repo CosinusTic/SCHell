@@ -40,7 +40,6 @@ pub fn execute_command(
 }
 
 pub fn exec(node: AstNode, registered_commands: &HashMap<String, Command>) {
-    // println!("Node at execution stage: {:?}", node);
     match node {
         AstNode::Command { name, args } => {
             if let Some(cmd) = registered_commands.get(&name) {
@@ -55,7 +54,6 @@ pub fn exec(node: AstNode, registered_commands: &HashMap<String, Command>) {
             }
         }
         AstNode::Pipe { left, right } => {
-            // println!("Encountered pipe (Left: {:?}, right: {:?})", left, right);
             let out = capt_stdout(|| {
                 exec(*left, registered_commands);
             });

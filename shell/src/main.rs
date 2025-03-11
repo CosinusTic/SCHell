@@ -29,66 +29,18 @@ fn main() -> Result<()> {
     }
 
     */
-    /* -------------------------- Stdout tests ------------------- */
-
-    /*
-    let out = capt_stdout(|| {
-        myshell::commands::greet();
-    });
-    */
 
     /* --------------- AST shell test ---------------------- */
     let commands = register_commands();
     loop {
         print!("> ");
         stdout().flush().unwrap();
-        /*let mut input = String::new();
-        stdin()
-            .read_line(&mut input)
-            .expect("Failed to read command.");
-        println!("Trimmed input: {:?}", str_to_vec(input.as_str()));
-        let v = str_to_vec(input.as_str());*/
         let mut input = String::new();
         std::io::stdin().read_line(&mut input)?;
-        let mut lines: Vec<String> = input.trim().split_whitespace().map(String::from).collect();
-        let slice: &[String] = &lines;
+        let lines: Vec<String> = input.trim().split_whitespace().map(String::from).collect();
 
         let cmd_slice: &[String] = &lines;
-        let cmd1 = &[
-            "ls".to_string(),
-            ".".to_string(),
-            "|".to_string(),
-            "hello".to_string(),
-        ];
-
-        let cmd2 = &[
-            "ls".to_string(),
-            "-la".to_string(),
-            ".".to_string(),
-            "|".to_string(),
-            "grep".to_string(),
-            "zizi".to_string(),
-        ];
-
-        let cmd3 = &[
-            "ls".to_string(),
-            ".".to_string(),
-            "|".to_string(),
-            "hello".to_string(),
-        ];
-
-        let cmd4 = &["ls".to_string(), ".".to_string()];
-        let cmd5 = &[
-            "ls".to_string(),
-            ".".to_string(),
-            "|".to_string(),
-            "grep".to_string(),
-            "zizi".to_string(),
-        ];
         let node = parse(cmd_slice);
-        // node.debug();
         exec(node, &commands);
-
-        // get_RAM_size();
     }
 }
