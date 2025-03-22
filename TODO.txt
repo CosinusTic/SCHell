@@ -12,5 +12,22 @@ Window:
             2* Fork the shell process and redirect stdin, stdout, stderr to the 
             slave end
             3* Interact with the paster in window (read output, send input)
-    - GUI for master user input and slave output
+    - GUI for master user input and slave output, ROADMAP:
+        Create a Window
+            Using winit, SDL, or your favorite Rust GUI framework.
+
+        Open a PTY
+            let pair = pty_system.openpty(...)?;
+
+        Spawn your shell (or program) on the slave side.
+
+        Maintain an event loop in your GUI:
+            On keyboard input: send bytes to the PTY master (like pressing Enter becomes \r\n, etc.).
+            On mouse scroll or clicks: optionally handle them or pass them as input if your shell supports mouse reporting.
+
+        Read from the PTY master in a background thread or async task:
+            Parse or just pass through the escape codes your shell outputs (for color, cursor movement, etc.).
+            Render the text in your GUI’s drawing area.
+
+        End when the user closes the window or the shell terminates.
 
