@@ -5,21 +5,6 @@ Shell:
 
 Window:
     - Implement PTY architecture:
-The window process (terminal emulator) allocates a new PTY pair, 
-taking the master end for itself and assigning the slave end to the 
-shell process, which believes it's connected to a real terminal.
-
-[Your Terminal Emulator (Window)]
-    └── owns PTY Master
-         ├── read ←── shell stdout/stderr
-         └── write ──→ shell stdin
-
-[Your Shell Process (Child)]
-    └── uses PTY Slave
-         ├── stdin, stdout, stderr attached
-         └── behaves like a real terminal
-
-
         --> Master: window process
         --> Slave: assigned to the shell process
         --> Steps:
@@ -27,5 +12,5 @@ shell process, which believes it's connected to a real terminal.
             2* Fork the shell process and redirect stdin, stdout, stderr to the 
             slave end
             3* Interact with the paster in window (read output, send input)
-    - Spawn shell binary as child process
-    - Communication with the shell process
+    - GUI for master user input and slave output
+

@@ -10,6 +10,7 @@ pub fn echo(args: Vec<String>) {
 }
 
 pub fn ls(args: Vec<String>) {
+    println!("Function does launch");
     let files = fs::read_dir(&args[0]).unwrap();
 
     for file in files {

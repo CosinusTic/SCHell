@@ -31,6 +31,8 @@ fn main() -> Result<()> {
     */
 
     /* --------------- AST shell test ---------------------- */
+    println!("Shell starting up !");
+    std::thread::sleep(std::time::Duration::from_millis(500));
     let commands = register_commands();
     loop {
         print!("> ");
