@@ -13,9 +13,6 @@ Window:
             slave end
             3* Interact with the paster in window (read output, send input)
     - GUI for master user input and slave output, ROADMAP:
-        Create a Window
-            Using winit, SDL, or your favorite Rust GUI framework.
-
         Open a PTY
             let pair = pty_system.openpty(...)?;
 
