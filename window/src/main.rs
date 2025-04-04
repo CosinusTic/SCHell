@@ -15,7 +15,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
 
-const FONT_PATH: &str = "/usr/share/fonts/truetype/hack/Hack-Regular.ttf";
+const FONT_PATH: &str = "/usr/share/fonts/archcraft/nerd-fonts/Hack/HackNerdFont-Bold.ttf";
 const FONT_SIZE: u16 = 16;
 
 fn render_line<'a>(
@@ -41,7 +41,7 @@ pub fn main() -> Result<(), anyhow::Error> {
     let rows: u16 = 24;
     let cols: u16 = 80;
 
-    let p2 = "/home/nathan/Documents/Personal/Projects/my_shell/target/debug/shell";
+    let p2 = "/home/cosinutt/Documents/Personal/SCHell/target/debug/shell";
 
     let pair: PtyPair = pty_system.openpty(PtySize {
         rows,
